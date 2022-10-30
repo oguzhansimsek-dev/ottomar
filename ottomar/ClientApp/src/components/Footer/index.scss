@@ -1,0 +1,31 @@
+footer {
+  padding: 25px;
+  background-color: #20314c;
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.footer-logo {
+  height: 30px;
+  margin-bottom: 15px;
+}
+
+.footer-menu {
+  list-style-type: none;
+  display: flex;
+  width: 340px;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.5) !important;
+
+  a {
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      color: #354a6b !important;
+    }
+  }
+}
