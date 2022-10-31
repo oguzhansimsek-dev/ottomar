@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/oguzhan/Desktop/ottomar/ottomar/ottomar.csproj": {}
+    "/Users/oguzhan/Documents/GitHub/ottomar/ottomar/ottomar.csproj": {}
   },
   "projects": {
-    "/Users/oguzhan/Desktop/ottomar/ottomar/ottomar.csproj": {
+    "/Users/oguzhan/Documents/GitHub/ottomar/ottomar/ottomar.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/oguzhan/Desktop/ottomar/ottomar/ottomar.csproj",
+        "projectUniqueName": "/Users/oguzhan/Documents/GitHub/ottomar/ottomar/ottomar.csproj",
         "projectName": "ottomar",
-        "projectPath": "/Users/oguzhan/Desktop/ottomar/ottomar/ottomar.csproj",
+        "projectPath": "/Users/oguzhan/Documents/GitHub/ottomar/ottomar/ottomar.csproj",
         "packagesPath": "/Users/oguzhan/.nuget/packages/",
-        "outputPath": "/Users/oguzhan/Desktop/ottomar/ottomar/obj/",
+        "outputPath": "/Users/oguzhan/Documents/GitHub/ottomar/ottomar/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/oguzhan/.nuget/NuGet/NuGet.Config"
@@ -37,6 +37,16 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.0-rc.2.22472.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.0-rc.2.22472.11, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
