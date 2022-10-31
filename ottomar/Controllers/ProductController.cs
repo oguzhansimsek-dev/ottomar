@@ -63,10 +63,31 @@ namespace ottomar.Controllers{
 
         return Ok(product);
 
+      }catch(Exception e){
+        return StatusCode(500, e.Message);
+      }
+    }
+
+    [HttpPut("UpdateProduct")]
+    public IActionResult UpdateProduct([FromBody] Product updatedProduct){
+      try{  
+        Product product = _dbContext.Products.FirstOrDefault( p=> p.productId == updatedProduct.productId );
+
+        product.productName = updatedProduct.productName;
+        product.productDesc = updatedProduct.productDesc;
+        product.productCode = updatedProduct.productCode;
+        product.stock = updatedProduct.stock;
+        product.categoryId = updatedProduct.categoryId;
+
+        _dbContext.Entry(product).State = EntityState.Modified;
+        _dbContext.SaveChanges();
+
+        return Ok(product);
 
       }catch(Exception e){
         return StatusCode(500, e.Message);
       }
+
     }
 
   }

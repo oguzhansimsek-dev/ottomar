@@ -119,6 +119,55 @@ namespace ottomar.Controllers{
       }
     }
 
+    [HttpDelete("DeleteUser")]
+    public IActionResult DeleteUser([FromBody] int userId){
+      try{
+        User user = _dbContext.Users.FirstOrDefault(u => u.userId == userId);
+
+        _dbContext.Entry(user).State = EntityState.Deleted;
+        _dbContext.SaveChanges();
+
+        return Ok(user);
+
+      }catch(Exception e){
+        return StatusCode(500, e.Message);
+      }
+    }
+
+    [HttpPut("UpdateUser")]
+    public IActionResult UpdateUser([FromBody] UserForUpdateDto updatedUser ){
+      byte[] passwordHash, passwordSalt;
+
+      try{
+        User user = _dbContext.Users.FirstOrDefault(u => u.userId == updatedUser.userId);
+
+        bool result = VerifyPasswordHash(updatedUser.oldPassword, user.passHash, user.passSalt);
+
+        if(result){
+          user.username = updatedUser.username;
+          user.firstname = updatedUser.firstname;
+          user.lastname = updatedUser.lastname;
+
+          if(updatedUser.newPassword != "" && !PasswordCheck(updatedUser.newPassword) ){
+
+            CreatePasswordHash(updatedUser.newPassword , out passwordHash, out passwordSalt);
+            user.passHash = passwordHash;
+            user.passSalt = passwordSalt;
+          }
+        }else{
+          return StatusCode(500, "Eski şifre hatalı");
+        }
+
+        _dbContext.Entry(user).State = EntityState.Modified;
+        _dbContext.SaveChanges();
+
+        return Ok(updatedUser);
+        
+      }catch(Exception e){
+        return StatusCode(500, e.Message);
+      }
+    }
+
     [HttpGet("Login")]
     public IActionResult Login([FromBody] UserForLoginDto userDto){
       User user = new User();
