@@ -1,4 +1,5 @@
 //* node_modules
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 //* Pages
@@ -17,7 +18,30 @@ import Service from "./pages/Services/Service";
 import Header, { MobileNav } from "./components/Header";
 import Footer from "./components/Footer";
 
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "./pages/Products/productSlice";
+
 function App() {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products.value);
+
+  async function fetchProducts() {
+    let url = "https://localhost:7292/api/product/getproducts";
+    await fetch(url)
+      .then((response) => response.json())
+      .then((res) => {
+        dispatch(getProducts(res));
+      });
+
+    //console.log(products);
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  console.log(products);
+
   return (
     <div className="App">
       {window.innerWidth < 990 ? <MobileNav /> : <Header />}

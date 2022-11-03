@@ -1,11 +1,12 @@
+//* node_modules
+import React, { useEffect } from "react";
+import { Container, Row, Col } from "reactstrap";
+
 //* Components
 import ProductList from "../../components/ProductList";
 
 //* Styles files
 import "./index.scss";
-
-//* node_modules
-import { Container, Row, Col } from "reactstrap";
 
 const Main = () => {
   return (

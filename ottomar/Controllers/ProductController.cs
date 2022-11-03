@@ -33,6 +33,18 @@ namespace ottomar.Controllers{
       }
     }
 
+    [HttpGet("GetProductsByCategoryId/{categoryId}")]
+    public IActionResult GetProductsByCategoryId([FromRoute] int categoryId){
+      try{
+        List<Product> products = _dbContext.Products.Where(p => p.categoryId == categoryId).ToList();
+        
+          return Ok(products);
+
+      }catch(Exception e){
+        return StatusCode(500, e.Message);
+      }
+    }
+
     [HttpPost("AddProduct")]
     public IActionResult AddProduct([FromBody] AddProductDto newProduct){
       try{
