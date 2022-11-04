@@ -1,5 +1,6 @@
 //* node_modules
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Container,
   Row,
@@ -34,7 +35,13 @@ import "./index.scss";
 import logo from "../../assets/uploads/logo.png";
 //require("/Users/oguzhan/Desktop/ottomar-dogaltas/src/assets/uploads/logo.png")
 
-const Header = () => {
+//*Reducers
+import { currentCategory } from "../../app/reducers/categorySlice";
+
+const Header = (props) => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.value);
+
   const [toggle1, setToggle1] = useState(false);
   const [toggle2, setToggle2] = useState(false);
   const [toggle3, setToggle3] = useState(false);
@@ -133,21 +140,20 @@ const Header = () => {
                     <ChevronDownIcon />
                   </DropdownToggle>
                   <DropdownMenu>
-                    <Link to="/urunler/blok" className="dropdown-item">
-                      Blok
-                    </Link>
-                    <Link to="/urunler/plaka" className="dropdown-item">
-                      Plaka
-                    </Link>
-                    <Link to="/urunler/traverten" className="dropdown-item">
-                      Traverten
-                    </Link>
-                    <Link
-                      to="/urunler/yardimci-ekipman"
-                      className="dropdown-item"
-                    >
-                      Yardımcı Ekipman
-                    </Link>
+                    {categories.map((c) => {
+                      return (
+                        <Link
+                          to={"/urunler/" + c.categoryLink}
+                          key={c.categoryId}
+                          className="dropdown-item"
+                          onClick={() => {
+                            dispatch(currentCategory(c));
+                          }}
+                        >
+                          {c.categoryName}
+                        </Link>
+                      );
+                    })}
                   </DropdownMenu>
                 </Dropdown>
                 <Dropdown

@@ -1,69 +1,68 @@
 //* node_modules
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Route } from "react-router-dom";
+
+//*Pages
+import PageNotFound from "../PageNotFound";
 
 //* Components
 import PageTitle from "../../components/PageTitle";
 import ProductList from "../../components/ProductList";
+import CustomSpinner from "../../components/RootComponents/Spinner";
 
 //* Reducers
-import { getProducts } from "./productSlice";
+import { getProducts } from "../../app/reducers/productSlice";
+import { currentCategory as setCurrentCategory } from "../../app/reducers/categorySlice";
 
 const Products = (props) => {
-  let params = useParams();
   const dispatch = useDispatch();
+  const { category } = useParams();
 
+  const currentCategory = useSelector((state) => state.categories.current);
+  const products = useSelector((state) => state.products.value);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Parametre olarak gelen string ile kategori bilgilerini getir. currentCategory güncelle.
+  async function fetchCategoryByCategoryLink(cLink) {
+    const url =
+      "https://localhost:7292/api/category/GetCategoryByCategoryLink/" + cLink;
+
+    await fetch(url)
+      .then((response) => response.json())
+      .then((res) => dispatch(setCurrentCategory(res)));
+  }
+
+  // Kategoriye göre Ürünleri getir.
   async function fetchProductsByCategoryId(id) {
+    setIsLoading(true);
     const url =
       "https://localhost:7292/api/product/getproductsbycategoryid/" + id;
 
     await fetch(url)
       .then((response) => response.json())
-      .then((res) => dispatch(getProducts(res)));
+      .then((res) => {
+        dispatch(getProducts(res));
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
-    fetchProductsByCategoryId(1);
-  }, []);
+    if (currentCategory.categoryId == null) {
+      fetchCategoryByCategoryLink(category);
+    }
 
-  const products = useSelector((state) => state.products.value);
-
-  // BAŞLIK OLUŞTURMA
-  function selectTitle(category) {
-    let title = "";
-    const titles = [
-      { id: 1, param: "blok", title: "Blok" },
-      { id: 2, param: "plaka", title: "Plaka" },
-      { id: 3, param: "traverten", title: "Traverten" },
-      { id: 4, param: "yardimci-ekipman", title: "Yardımcı Ekipman" },
-    ];
-
-    titles.forEach((elem) => {
-      if (elem.param === category) {
-        //console.log(elem.title);
-        title = elem.title;
-      }
-    });
-    return title;
-  }
-
-  // function editTitle(category) {
-  //   let newTitle = category.split("-");
-  //   let result = "";
-  //   newTitle.forEach((t) => {
-  //     t = t.charAt(0).toUpperCase() + t.slice(1);
-  //     result = result + " " + t;
-  //   });
-
-  //   return result;
-  // }
+    fetchProductsByCategoryId(currentCategory.categoryId);
+  }, [category]);
 
   return (
     <section>
-      <PageTitle title={selectTitle(params.category)} />
+      <PageTitle title={currentCategory.categoryName} />
       <div className="page-container">
-        <ProductList products={products} />
+        {isLoading ? <CustomSpinner /> : <ProductList products={products} />}
       </div>
     </section>
   );

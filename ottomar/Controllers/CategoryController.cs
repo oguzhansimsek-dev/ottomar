@@ -22,12 +22,36 @@ namespace ottomar.Controllers{
     public IActionResult GetCategories(){
       try{
         List<Category> categories = _dbContext.Categories.ToList();
+        List<CategoryForClientDto> newCategories = new List<CategoryForClientDto>();
 
         if(categories.Count() == 0){
           return StatusCode(404, "No category found");
         }
 
-        return Ok(categories);
+        foreach( Category c in categories ){
+          CategoryForClientDto newCat = new CategoryForClientDto();
+          newCat.categoryId = c.categoryId;
+          newCat.categoryName = c.categoryName;
+          newCat.categoryLink = Cevir(c.categoryName)+ "-cId-" + c.categoryId;
+
+          newCategories.Add(newCat);
+        }
+
+        return Ok(newCategories);
+      }catch(Exception e){
+        return StatusCode(500, e.Message);
+      }
+    }
+    [HttpGet("GetCategoryByCategoryLink/{link}")]
+    public IActionResult GetCategoryByCName([FromRoute] string link){
+      try{
+        string[] arr = new string[] {};
+        arr = link.Split('-');
+        int cId = Int32.Parse(arr[ arr.Length - 1 ]);
+        Category category = _dbContext.Categories.FirstOrDefault( c => c.categoryId == cId);
+        
+        return Ok(category);
+
       }catch(Exception e){
         return StatusCode(500, e.Message);
       }
@@ -87,7 +111,18 @@ namespace ottomar.Controllers{
       }
     }
 
+    public string Cevir(string text) {
+    
+      text=  text.ToLower();
+      text = text.Replace('ö', 'o');
+      text = text.Replace('ü', 'u');
+      text = text.Replace('ğ', 'g');
+      text = text.Replace('ş', 's');
+      text = text.Replace('ı', 'i');
+      text = text.Replace('ç', 'c');
+      text = text.Replace(' ', '-');
+
+      return text;
+    }
   }
-
-
-}
+} 

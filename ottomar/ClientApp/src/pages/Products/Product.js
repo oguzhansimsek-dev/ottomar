@@ -4,7 +4,7 @@ import PageTitle from "../../components/PageTitle";
 //* node_modules
 import { Container, Row, Col } from "reactstrap";
 
-const Product = () => {
+const Product = (props) => {
   return (
     <section>
       <PageTitle title="Ürün Başlığı" />

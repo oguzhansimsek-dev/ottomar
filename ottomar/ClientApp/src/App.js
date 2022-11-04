@@ -1,6 +1,7 @@
 //* node_modules
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //* Pages
 import Main from "./pages/Main";
@@ -13,34 +14,28 @@ import Products from "./pages/Products";
 import Product from "./pages/Products/Product";
 import Services from "./pages/Services";
 import Service from "./pages/Services/Service";
+import PageNotFound from "./pages/PageNotFound";
 
 //* Components
 import Header, { MobileNav } from "./components/Header";
 import Footer from "./components/Footer";
 
-import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "./pages/Products/productSlice";
+//*Reducers
+import { getCategories } from "./app/reducers/categorySlice";
 
 function App() {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.value);
 
-  async function fetchProducts() {
-    let url = "https://localhost:7292/api/product/getproducts";
-    await fetch(url)
+  async function fetchCategories() {
+    const url = "https://localhost:7292/api/category/getcategories";
+    const categories = await fetch(url)
       .then((response) => response.json())
-      .then((res) => {
-        dispatch(getProducts(res));
-      });
-
-    //console.log(products);
+      .then((res) => dispatch(getCategories(res)));
   }
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategories();
   }, []);
-
-  console.log(products);
 
   return (
     <div className="App">
@@ -59,6 +54,8 @@ function App() {
 
         <Route exact path="/urunler/:category" element={<Products />} />
         <Route exact path="/urun/:urunId" element={<Product />} />
+
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Footer />
