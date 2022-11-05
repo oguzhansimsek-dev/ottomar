@@ -69,7 +69,7 @@ namespace ottomar.Controllers{
         List<ProductForClientDto> newProducts = new List<ProductForClientDto>();
         
         if(products.Count() == 0){
-          return StatusCode(404, "No products found");
+          return Ok(products);
         }
 
         foreach(Product p in products){

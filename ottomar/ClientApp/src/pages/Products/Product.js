@@ -1,8 +1,10 @@
 //* node_modules
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Spinner from "../../components/RootComponents/Spinner";
+import { Carousel } from "react-responsive-carousel";
 
 //* Components
 import PageTitle from "../../components/PageTitle";
@@ -10,48 +12,71 @@ import PageTitle from "../../components/PageTitle";
 //* Reducers
 import { getProductByProductId } from "../../app/reducers/productSlice";
 
-const Product = (props) => {
+const Product = () => {
   const { productLink } = useParams();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.product);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchProduct(pLink) {
+    setIsLoading(true);
     const url =
       "https://localhost:7292/api/product/GetProductByProductLink/" + pLink;
     await fetch(url)
       .then((response) => response.json())
-      .then((res) => dispatch(getProductByProductId(res)));
+      .then((res) => {
+        dispatch(getProductByProductId(res));
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
     fetchProduct(productLink);
   }, []);
-  console.log(product);
-  return (
-    <section>
-      <PageTitle title={product.productName} />
+
+  const ShowProductDetail = (p) => {
+    return (
       <Container className="page-container">
         <Row>
-          <Col sm="12" md="8" lg="8"></Col>
+          <Col sm="12" md="8" lg="8">
+            <Carousel>
+              <div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjwryxFfYgPyHD3zskTOzCeb46CAGESFt5NA&usqp=CAU" />
+              </div>
+              <div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjwryxFfYgPyHD3zskTOzCeb46CAGESFt5NA&usqp=CAU" />
+              </div>
+              <div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjwryxFfYgPyHD3zskTOzCeb46CAGESFt5NA&usqp=CAU" />
+              </div>
+            </Carousel>
+          </Col>
           <Col sm="12" md="4" lg="4">
             <h5>
-              <b>{product.productName}</b>
+              <b>{p.productName}</b>
             </h5>
             <hr></hr>
-            <span>Ürün Kodu: {product.productCode}</span>
+            <span>Ürün Kodu: {p.productCode}</span>
             <br />
             <span>
               Stok Durumu:{" "}
-              {product.stock === 0 ? (
+              {p.stock === 0 ? (
                 <b style={{ color: "red", fontWeight: "bold" }}>Stokta Yok</b>
               ) : (
-                product.stock + " Adet"
+                p.stock + " Adet"
               )}
             </span>
             <hr></hr>
           </Col>
         </Row>
       </Container>
+    );
+  };
+
+  return (
+    <section>
+      <PageTitle title={product.productName} />
+      {isLoading === true ? <Spinner /> : ShowProductDetail(product)}
     </section>
   );
 };

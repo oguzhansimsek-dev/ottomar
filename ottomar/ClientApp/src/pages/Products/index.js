@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Route } from "react-router-dom";
 
 //*Pages
 import PageNotFound from "../PageNotFound";
@@ -11,6 +10,7 @@ import PageNotFound from "../PageNotFound";
 import PageTitle from "../../components/PageTitle";
 import ProductList from "../../components/ProductList";
 import CustomSpinner from "../../components/RootComponents/Spinner";
+import ErrorMessage from "../../components/RootComponents/ErrorMessage";
 
 //* Reducers
 import { getProducts } from "../../app/reducers/productSlice";
@@ -54,8 +54,8 @@ const Products = (props) => {
     if (currentCategory.categoryId == null) {
       fetchCategoryByCategoryLink(category);
     }
-
     fetchProductsByCategoryId(currentCategory.categoryId);
+    console.log(products);
   }, [category]);
 
   return (
@@ -63,6 +63,11 @@ const Products = (props) => {
       <PageTitle title={currentCategory.categoryName} />
       <div className="page-container">
         {isLoading ? <CustomSpinner /> : <ProductList products={products} />}
+        {products.length == 0 ? (
+          <ErrorMessage message={"Ürün bulunamadı."} />
+        ) : (
+          ""
+        )}
       </div>
     </section>
   );

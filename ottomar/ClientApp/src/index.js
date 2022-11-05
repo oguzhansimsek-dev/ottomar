@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 //* Style files
 import "./assets/styles/index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import { Provider } from "react-redux";
 import store from "./app/store";
