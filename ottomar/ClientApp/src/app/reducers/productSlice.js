@@ -16,11 +16,11 @@ export const productSlice = createSlice({
     },
 
     getProductByProductId(state, action) {
-      state.value = action.payload;
+      state.product = action.payload;
     },
   },
 });
 
-export const { getProducts } = productSlice.actions;
+export const { getProducts, getProductByProductId } = productSlice.actions;
 
 export default productSlice.reducer;

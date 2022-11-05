@@ -53,7 +53,7 @@ function App() {
         <Route path="/hizmet/:hizmetId" element={<Service />} />
 
         <Route exact path="/urunler/:category" element={<Products />} />
-        <Route exact path="/urun/:urunId" element={<Product />} />
+        <Route exact path="/urun/:productLink" element={<Product />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

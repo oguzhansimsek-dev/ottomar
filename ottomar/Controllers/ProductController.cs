@@ -66,8 +66,26 @@ namespace ottomar.Controllers{
     public IActionResult GetProductsByCategoryId([FromRoute] int categoryId){
       try{
         List<Product> products = _dbContext.Products.Where(p => p.categoryId == categoryId).ToList();
+        List<ProductForClientDto> newProducts = new List<ProductForClientDto>();
         
-          return Ok(products);
+        if(products.Count() == 0){
+          return StatusCode(404, "No products found");
+        }
+
+        foreach(Product p in products){
+          ProductForClientDto newProduct = new ProductForClientDto();
+          newProduct.productId = p.productId;
+          newProduct.productName = p.productName;
+          newProduct.productDesc = p.productDesc;
+          newProduct.productCode = p.productCode;
+          newProduct.stock = p.stock;
+          newProduct.categoryId = p.categoryId;
+          newProduct.productLink = Cevir(p.productName) + "-pId-" + p.productId ;
+
+          newProducts.Add(newProduct);
+        }
+
+        return Ok(newProducts);
 
       }catch(Exception e){
         return StatusCode(500, e.Message);
