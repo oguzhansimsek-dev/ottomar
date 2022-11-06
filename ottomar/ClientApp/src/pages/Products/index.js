@@ -55,7 +55,6 @@ const Products = (props) => {
       fetchCategoryByCategoryLink(category);
     }
     fetchProductsByCategoryId(currentCategory.categoryId);
-    console.log(products);
   }, [category]);
 
   return (
