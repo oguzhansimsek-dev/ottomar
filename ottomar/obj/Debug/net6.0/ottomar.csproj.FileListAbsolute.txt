@@ -75,3 +75,5 @@
 /Users/oguzhan/Documents/GitHub/ottomar/ottomar/obj/Debug/net6.0/ottomar.pdb
 /Users/oguzhan/Documents/GitHub/ottomar/ottomar/obj/Debug/net6.0/ottomar.genruntimeconfig.cache
 /Users/oguzhan/Documents/GitHub/ottomar/ottomar/obj/Debug/net6.0/ref/ottomar.dll
+/Users/oguzhan/Documents/GitHub/ottomar/ottomar/bin/Debug/net6.0/ClientApp/build/asset-manifest.json
+/Users/oguzhan/Documents/GitHub/ottomar/ottomar/bin/Debug/net6.0/ClientApp/build/manifest.json
